@@ -1,12 +1,43 @@
 <script>
+import axios from 'axios'
+export default {
+  data(){
+    return{
+      city:'',
+      error:'',
+      info:null
+    }
+  },
+  computed:{
+    cityName(){
+      return '<<' + this.city + '>>'
+    }
+  },
+  methods:{
+
+    WeatherTracker(){
+      if(this.city.trim().length < 2){
+        this.error = "Too short name"
+        return false
+      }
+      this.error =''
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=cd1534c65c4362db9c416789ee85f30b`)
+      .then(res =>(this.info = res.data.weather))
+    }
+  }
+}
 </script>
 
 <template>
   <div class="wrapper">
     <h1>Weather Tracker</h1>
-    <p>Track your City Weather</p>
-    <input type="text" placeholder="Input City">
-    <button>Recieve Weather</button>
+    <p>Track Weather in: {{ city == "" ? '':  cityName}}</p>
+    <input type="text" v-model="city" placeholder="Input City">
+    <p v-if="city==''">Enter City Name</p>
+    <button v-else @click="WeatherTracker()">Recieve Weather</button>
+    <p class="error">{{ error }}</p>
+
+    <p v-if="info">{{ info }}</p>
   </div>
 </template>
 
@@ -27,7 +58,7 @@
   background: transparent;
   border: 2px solid black;
   border-radius: 10px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 14px;
   padding: 5px;
   outline: none;
@@ -44,9 +75,11 @@ border: 2px solid black;
 border-radius: 10px;
 font-size: 16px;
 color: rgb(39, 44, 44);
+transition: transform 500ms ease;
 }
 .wrapper button:hover{
   background: rgba(200,255,123,1);
+  transform: scale(1.1);
 }
 .wrapper button:active{
   background: rgb(89, 145, 12);
