@@ -21,8 +21,8 @@ export default {
         return false
       }
       this.error =''
-      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=cd1534c65c4362db9c416789ee85f30b`)
-      .then(res =>(this.info = res.data.weather))
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=3d9de74844d28377e81415151cbe6a66`)
+      .then(res =>(this.info = res.data))
     }
   }
 }
@@ -37,7 +37,7 @@ export default {
     <button v-else @click="WeatherTracker()">Recieve Weather</button>
     <p class="error">{{ error }}</p>
 
-    <p v-if="info">{{ info }}</p>
+    <p v-if="info">{{ info.main.temp }}</p>
   </div>
 </template>
 
